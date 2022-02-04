@@ -1,0 +1,14 @@
+[
+    {
+        "level_id" : 0
+    },
+    {
+        "level_id" : 1,
+        "level_info" :
+        {
+            "level_map" : "level/1.map",
+            "player_pos" : [4, 4],
+            "box_pos_list" : [[3, 3], [3, 5], [4, 3], [5, 4]]
+        }
+    }
+]

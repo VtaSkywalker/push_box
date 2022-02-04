@@ -17,10 +17,10 @@ class levelStage:
             level文件的路径
     """
     def __init__(self):
-        self.level_map = None
-        self.player_pos = None
-        self.box_pos_list = None
-        self.level_file_path = ""
+        self.level_map = "XXX\nX0X\nXXX"
+        self.player_pos = [1, 1]
+        self.box_pos_list = []
+        self.level_file_path = "levelConfig.json"
 
     def load_level_map(self, level_map_file_path):
         """
@@ -66,7 +66,8 @@ class levelStage:
             level_id : int
                 level编号
         """
-        data = json.load(self.level_file_path)["level_id"]
-        self.level_map = self.load_level_map(data["level_id"])
-        self.player_pos = data["player_pos"]
-        self.box_pos_list = data["box_pos_list"]
+        with open(self.level_file_path, "r") as f:
+            data = json.load(f)[level_id]
+        self.level_map = self.load_level_map(data["level_info"]["level_map"])
+        self.player_pos = data["level_info"]["player_pos"]
+        self.box_pos_list = data["level_info"]["box_pos_list"]
