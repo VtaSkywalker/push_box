@@ -39,6 +39,7 @@ class Display:
         # 初始化图形界面
         pygame.init()
         self.screen = pygame.display.set_mode(self.screen_size)
+        pygame.display.set_caption('push box - level %d' % level_id)
         self.main_loop()
 
     def main_loop(self):
