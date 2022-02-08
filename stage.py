@@ -19,6 +19,8 @@ class levelStage:
             用于撤销操作的栈（格式见注释最下方Info）
         redo_stack : list[][]
             用于重复操作的栈（格式见注释最下方Info）
+        level_id : int
+            当前所处的关卡编号
         
         Info
         ----
@@ -33,6 +35,7 @@ class levelStage:
         self.level_file_path = "levelConfig.json"
         self.undo_stack = []
         self.redo_stack = []
+        self.level_id = -1
 
     def load_level_map(self, level_map_file_path):
         """
@@ -83,6 +86,13 @@ class levelStage:
         self.level_map = self.load_level_map(data["level_info"]["level_map"])
         self.player_pos = data["level_info"]["player_pos"]
         self.box_pos_list = data["level_info"]["box_pos_list"]
+        self.level_id = level_id
+
+    def restart_level(self):
+        """
+            重开本关
+        """
+        self.load_level(self.level_id)
 
     def move(self, direction):
         """
@@ -198,10 +208,16 @@ class levelStage:
     def player_direction_signal_handler(self, direction):
         """
             处理：玩家发出的方向信号
+
+            Returns
+            -------
+            Ture / False : 是否游戏胜利
         """
         self.move(direction=direction)
         if(self.is_game_win()):
             print("Game Win!")
+            return True
+        return False
 
     def show_in_cmd(self):
         """

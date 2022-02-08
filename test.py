@@ -45,5 +45,18 @@ def undo_redo():
         st.show_in_cmd()
         print("="*60)
 
+def test_restart():
+    st = levelStage()
+    st.load_level(1)
+    st.show_in_cmd()
+    print("="*60)
+    st.player_direction_signal_handler(2)
+    st.player_direction_signal_handler(2)
+    st.player_direction_signal_handler(2)
+    st.show_in_cmd()
+    print("="*60)
+    st.restart_level()
+    st.show_in_cmd()
+
 if __name__ == "__main__":
-    undo_redo()
+    test_restart()
