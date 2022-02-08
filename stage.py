@@ -23,8 +23,8 @@ class levelStage:
         Info
         ----
         undo/redo栈的格式：
-        [[-1（表示玩家）, [玩家上/下一步的行坐标, 玩家上/下一步的列坐标]],
-         [（被移动的箱子的index）, [箱子上/下一步的行坐标, 箱子上/下一步的列坐标]]]
+        [[[-1（表示玩家）, [玩家上/下一步的行坐标, 玩家上/下一步的列坐标]],
+         [（被移动的箱子的index）, [箱子上/下一步的行坐标, 箱子上/下一步的列坐标]]], ...]
     """
     def __init__(self):
         self.level_map = np.array(["XXX", "X0X", "XXX"])
@@ -137,12 +137,48 @@ class levelStage:
         # 如果是空气/传动点，则可以移动
         elif(self.level_map[new_pos[0]][new_pos[1]] in ['C', 'H']):
             # 将当前玩家所在位置添加到undo栈中，方便撤销操作
-            self.undo_stack.append([-1, self.player_pos])
+            self.undo_stack.append([[-1, self.player_pos]])
             # 更新玩家位置
             self.player_pos = new_pos
         # 如果移动成功，则将redo栈清空，因为这种情况下就不能redo了
         self.redo_stack = []
         return
+
+    def undo(self):
+        """
+            撤销操作
+        """
+        if(len(self.undo_stack) != 0):
+            undo_info = self.undo_stack[-1]
+            new_redo_info = []
+            for each_undo_obj in undo_info:
+                if(each_undo_obj[0] == -1):
+                    new_redo_info.append([-1, self.player_pos])
+                    self.player_pos = each_undo_obj[1]
+                else:
+                    box_idx = each_undo_obj[0]
+                    new_redo_info.append([box_idx, self.box_pos_list[box_idx]])
+                    self.box_pos_list[box_idx] = each_undo_obj[1]
+            self.redo_stack.append(new_redo_info)
+            self.undo_stack = self.undo_stack[:-1]
+
+    def redo(self):
+        """
+            重做操作
+        """
+        if(len(self.redo_stack) != 0):
+            redo_info = self.redo_stack[-1]
+            new_undo_info = []
+            for each_redo_obj in redo_info:
+                if(each_redo_obj[0] == -1):
+                    new_undo_info.append([-1, self.player_pos])
+                    self.player_pos = each_redo_obj[1]
+                else:
+                    box_idx = each_redo_obj[0]
+                    new_undo_info.append([box_idx, self.box_pos_list[box_idx]])
+                    self.box_pos_list[box_idx] = each_redo_obj[1]
+            self.undo_stack.append(new_undo_info)
+            self.redo_stack = self.redo_stack[:-1]
 
     def is_game_win(self):
         """
