@@ -1,7 +1,7 @@
 import json
 import numpy as np
 
-class levelStage:
+class LevelStage:
     """
         level场景类
 
@@ -87,6 +87,21 @@ class levelStage:
         self.player_pos = data["level_info"]["player_pos"]
         self.box_pos_list = data["level_info"]["box_pos_list"]
         self.level_id = level_id
+
+    def get_map_size(self):
+        """
+            获取地图的尺寸（单位：grid）
+
+            Returns
+            -------
+            width : int
+                宽
+            height : int
+                高
+        """
+        width = len(self.level_map[0])
+        height = len(self.level_map)
+        return [width, height]
 
     def restart_level(self):
         """

@@ -1,7 +1,8 @@
-from stage import levelStage
+from display import Display
+from stage import LevelStage
 
 def load_level_and_move():
-    st = levelStage()
+    st = LevelStage()
     st.load_level(1)
     st.show_in_cmd()
     for direction in [1, 1, 3, 3, 1, 2, 2, 4, 4, 4, 3, 3, 3]:
@@ -10,13 +11,13 @@ def load_level_and_move():
         st.show_in_cmd()
 
 def level_1_game_win():
-    st = levelStage()
+    st = LevelStage()
     st.load_level(1)
     for direction in [3, 1, 2, 2, 4, 1, 1, 3, 4, 4]:
         st.player_direction_signal_handler(direction)
 
 def undo_redo():
-    st = levelStage()
+    st = LevelStage()
     st.load_level(1)
     st.show_in_cmd()
     print("="*60)
@@ -46,7 +47,7 @@ def undo_redo():
         print("="*60)
 
 def test_restart():
-    st = levelStage()
+    st = LevelStage()
     st.load_level(1)
     st.show_in_cmd()
     print("="*60)
@@ -58,5 +59,9 @@ def test_restart():
     st.restart_level()
     st.show_in_cmd()
 
+def test_stage_show():
+    d = Display()
+    d.load_level(1)
+
 if __name__ == "__main__":
-    test_restart()
+    test_stage_show()
