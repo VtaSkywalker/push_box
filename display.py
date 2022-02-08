@@ -2,7 +2,7 @@ from abc import update_abstractmethods
 from stage import LevelStage
 import pygame
 
-MAX_LEVEL_ID = 20
+MAX_LEVEL_ID = 10
 
 class Display:
     """
@@ -137,7 +137,7 @@ class Display:
             rect.centery = centery
             self.screen.blit(img, rect)
         # 绘制玩家
-        frame = self.time_stamp // int(self.fps / 2)
+        frame = (self.time_stamp % 30) // int(self.fps / 4)
         player_gif_img = self.player_gif_img_list[frame]
         player_gif_rect = player_gif_img.get_rect()
         player_pos = self.stage.player_pos
