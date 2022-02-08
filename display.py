@@ -53,6 +53,7 @@ class Display:
                     exit()
                 if(event.type == pygame.KEYDOWN):
                     if(not self.is_game_win):
+                        # 方向键
                         if(pygame.key.get_pressed()[pygame.K_UP] or pygame.key.get_pressed()[pygame.K_LEFT] or pygame.key.get_pressed()[pygame.K_DOWN] or pygame.key.get_pressed()[pygame.K_RIGHT]):
                             if(pygame.key.get_pressed()[pygame.K_UP]):
                                 direction = 1
@@ -64,10 +65,15 @@ class Display:
                                 direction = 4
                             if(self.stage.player_direction_signal_handler(direction=direction)):
                                 self.game_win()
-                        if(pygame.key.get_pressed()[pygame.K_u]):
+                        # 撤销
+                        if(pygame.key.get_pressed()[pygame.K_z]):
                             self.stage.undo()
-                        if(pygame.key.get_pressed()[pygame.K_r]):
+                        # 重做
+                        if(pygame.key.get_pressed()[pygame.K_x]):
                             self.stage.redo()
+                        # 重开
+                        if(pygame.key.get_pressed()[pygame.K_r]):
+                            self.stage.restart_level()
             # 绘制游戏界面
             self.game_stage_draw()
             pygame.display.update()

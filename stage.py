@@ -87,6 +87,8 @@ class LevelStage:
         self.player_pos = data["level_info"]["player_pos"]
         self.box_pos_list = data["level_info"]["box_pos_list"]
         self.level_id = level_id
+        self.undo_stack = []
+        self.redo_stack = []
 
     def get_map_size(self):
         """
