@@ -14,7 +14,7 @@ class Display:
         """
             初始化图像素材
         """
-        self.player_gif_img_list = [pygame.image.load("./img/player_gif/player_1.png"), pygame.image.load("./img/player_gif/player_2.png")]
+        self.player_gif_img_list = [pygame.image.load("./img/player_gif/player_0.png"), pygame.image.load("./img/player_gif/player_1.png")]
         self.aim_pos_img = pygame.image.load("./img/aim_pos.png")
         self.box_img = pygame.image.load("./img/box.png")
         self.box_complete_img = pygame.image.load("./img/box_complete.png")
@@ -50,6 +50,21 @@ class Display:
             for event in events:
                 if(event.type == pygame.QUIT):
                     exit()
+                if(event.type == pygame.KEYDOWN):
+                    if(pygame.key.get_pressed()[pygame.K_UP] or pygame.key.get_pressed()[pygame.K_LEFT] or pygame.key.get_pressed()[pygame.K_DOWN] or pygame.key.get_pressed()[pygame.K_RIGHT]):
+                        if(pygame.key.get_pressed()[pygame.K_UP]):
+                            direction = 1
+                        elif(pygame.key.get_pressed()[pygame.K_LEFT]):
+                            direction = 2
+                        elif(pygame.key.get_pressed()[pygame.K_DOWN]):
+                            direction = 3
+                        elif(pygame.key.get_pressed()[pygame.K_RIGHT]):
+                            direction = 4
+                        self.stage.player_direction_signal_handler(direction=direction)
+                    if(pygame.key.get_pressed()[pygame.K_u]):
+                        self.stage.undo()
+                    if(pygame.key.get_pressed()[pygame.K_r]):
+                        self.stage.redo()
             # 绘制游戏界面
             self.game_stage_draw()
             pygame.display.update()
@@ -57,7 +72,7 @@ class Display:
             self.update_time_stamp()
 
     def update_time_stamp(self):
-        pygame.time.delay(int(1 / self.fps))
+        pygame.time.delay(int(1e3 / self.fps))
         self.time_stamp += 1
         self.time_stamp = self.time_stamp % self.fps
 
@@ -92,3 +107,30 @@ class Display:
                     rect.centerx = centerx
                     rect.centery = centery
                     self.screen.blit(img, rect)
+        # 绘制箱子
+        box_rect = self.box_img.get_rect()
+        box_complete_rect = self.box_complete_img.get_rect()
+        for each_box_pos in self.stage.box_pos_list:
+            i = each_box_pos[0]
+            j = each_box_pos[1]
+            centerx = self.grid_size * (0.5 + each_box_pos[1])
+            centery = self.grid_size * (0.5 + each_box_pos[0])
+            if(level_map[i][j] == 'H'):
+                img = self.box_complete_img
+                rect = box_complete_rect
+            else:
+                img = self.box_img
+                rect = box_rect
+            rect.centerx = centerx
+            rect.centery = centery
+            self.screen.blit(img, rect)
+        # 绘制玩家
+        frame = self.time_stamp // 30
+        player_gif_img = self.player_gif_img_list[frame]
+        player_gif_rect = player_gif_img.get_rect()
+        player_pos = self.stage.player_pos
+        centerx = self.grid_size * (0.5 + player_pos[1])
+        centery = self.grid_size * (0.5 + player_pos[0])
+        player_gif_rect.centerx = centerx
+        player_gif_rect.centery = centery
+        self.screen.blit(player_gif_img, player_gif_rect)
