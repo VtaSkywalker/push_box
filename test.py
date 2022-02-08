@@ -15,5 +15,35 @@ def level_1_game_win():
     for direction in [3, 1, 2, 2, 4, 1, 1, 3, 4, 4]:
         st.player_direction_signal_handler(direction)
 
+def undo_redo():
+    st = levelStage()
+    st.load_level(1)
+    st.show_in_cmd()
+    print("="*60)
+    st.player_direction_signal_handler(1)
+    st.show_in_cmd()
+    print("="*60)
+    for dummy in range(2):
+        st.undo()
+        st.show_in_cmd()
+        print("="*60)
+    for dummy in range(2):
+        st.redo()
+        st.show_in_cmd()
+        print("="*60)
+    st.undo()
+    for dummy in range(2):
+        st.player_direction_signal_handler(3)
+    st.show_in_cmd()
+    print("="*60)
+    for dummy in range(2):
+        st.undo()
+        st.show_in_cmd()
+        print("="*60)
+    for dummy in range(2):
+        st.redo()
+        st.show_in_cmd()
+        print("="*60)
+
 if __name__ == "__main__":
-    level_1_game_win()
+    undo_redo()
