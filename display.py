@@ -2,6 +2,8 @@ from abc import update_abstractmethods
 from stage import LevelStage
 import pygame
 
+MAX_LEVEL_ID = 20
+
 class Display:
     """
         显示游戏界面的窗口
@@ -155,3 +157,15 @@ class Display:
 
     def game_win(self):
         self.is_game_win = True
+        self.unlock_new_level()
+
+    def unlock_new_level(self):
+        """
+            通关，解锁新的一关
+        """
+        sav_file_path = "./level.sav"
+        with open(sav_file_path, "r") as f:
+            max_unlock_level = int(f.readline().strip("\n"))
+        if(self.stage.level_id == max_unlock_level and max_unlock_level < MAX_LEVEL_ID):
+            with open(sav_file_path, "w") as f:
+                f.write("%d" % (max_unlock_level+1))
