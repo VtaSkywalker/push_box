@@ -1,5 +1,8 @@
 from display import Display
 from stage import LevelStage
+from mainform import MainWindow
+import sys
+from PyQt5 import QtWidgets, QtCore
 
 def load_level_and_move():
     st = LevelStage()
@@ -63,5 +66,11 @@ def test_stage_show():
     d = Display()
     d.load_level(1)
 
+def test_pyqt():
+    QtCore.QCoreApplication.setAttribute(QtCore.Qt.AA_EnableHighDpiScaling)
+    app = QtWidgets.QApplication([])
+    window = MainWindow()
+    sys.exit(app.exec())
+
 if __name__ == "__main__":
-    test_stage_show()
+    test_pyqt()

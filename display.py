@@ -50,7 +50,8 @@ class Display:
             events = pygame.event.get()
             for event in events:
                 if(event.type == pygame.QUIT):
-                    exit()
+                    pygame.display.quit()
+                    return
                 if(event.type == pygame.KEYDOWN):
                     if(not self.is_game_win):
                         # 方向键
