@@ -230,7 +230,6 @@ class LevelStage:
         """
         self.move(direction=direction)
         if(self.is_game_win()):
-            print("Game Win!")
             return True
         return False
 

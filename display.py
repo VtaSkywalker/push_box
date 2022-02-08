@@ -45,26 +45,29 @@ class Display:
         """
         self.time_stamp = 0
         self.fps = 60
+        self.is_game_win = False
         while True:
             events = pygame.event.get()
             for event in events:
                 if(event.type == pygame.QUIT):
                     exit()
                 if(event.type == pygame.KEYDOWN):
-                    if(pygame.key.get_pressed()[pygame.K_UP] or pygame.key.get_pressed()[pygame.K_LEFT] or pygame.key.get_pressed()[pygame.K_DOWN] or pygame.key.get_pressed()[pygame.K_RIGHT]):
-                        if(pygame.key.get_pressed()[pygame.K_UP]):
-                            direction = 1
-                        elif(pygame.key.get_pressed()[pygame.K_LEFT]):
-                            direction = 2
-                        elif(pygame.key.get_pressed()[pygame.K_DOWN]):
-                            direction = 3
-                        elif(pygame.key.get_pressed()[pygame.K_RIGHT]):
-                            direction = 4
-                        self.stage.player_direction_signal_handler(direction=direction)
-                    if(pygame.key.get_pressed()[pygame.K_u]):
-                        self.stage.undo()
-                    if(pygame.key.get_pressed()[pygame.K_r]):
-                        self.stage.redo()
+                    if(not self.is_game_win):
+                        if(pygame.key.get_pressed()[pygame.K_UP] or pygame.key.get_pressed()[pygame.K_LEFT] or pygame.key.get_pressed()[pygame.K_DOWN] or pygame.key.get_pressed()[pygame.K_RIGHT]):
+                            if(pygame.key.get_pressed()[pygame.K_UP]):
+                                direction = 1
+                            elif(pygame.key.get_pressed()[pygame.K_LEFT]):
+                                direction = 2
+                            elif(pygame.key.get_pressed()[pygame.K_DOWN]):
+                                direction = 3
+                            elif(pygame.key.get_pressed()[pygame.K_RIGHT]):
+                                direction = 4
+                            if(self.stage.player_direction_signal_handler(direction=direction)):
+                                self.game_win()
+                        if(pygame.key.get_pressed()[pygame.K_u]):
+                            self.stage.undo()
+                        if(pygame.key.get_pressed()[pygame.K_r]):
+                            self.stage.redo()
             # 绘制游戏界面
             self.game_stage_draw()
             pygame.display.update()
@@ -125,7 +128,7 @@ class Display:
             rect.centery = centery
             self.screen.blit(img, rect)
         # 绘制玩家
-        frame = self.time_stamp // 30
+        frame = self.time_stamp // int(self.fps / 2)
         player_gif_img = self.player_gif_img_list[frame]
         player_gif_rect = player_gif_img.get_rect()
         player_pos = self.stage.player_pos
@@ -134,3 +137,14 @@ class Display:
         player_gif_rect.centerx = centerx
         player_gif_rect.centery = centery
         self.screen.blit(player_gif_img, player_gif_rect)
+        # 通关文字显示
+        if(self.is_game_win):
+            font = pygame.font.SysFont("arial", 35)
+            img = font.render('Game Win', True, (0, 255, 0))
+            rect = img.get_rect()
+            rect.centerx = self.screen_size[0] / 2
+            rect.centery = self.grid_size * 0.5
+            self.screen.blit(img, rect)
+
+    def game_win(self):
+        self.is_game_win = True
